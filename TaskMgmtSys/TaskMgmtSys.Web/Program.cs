@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskMgmtSys.Web.Data;
 using TaskMgmtSys.Web.Entities;
+using TaskMgmtSys.Web.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,20 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+if (app.Environment.IsProduction())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.Migrate();
+    }
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    await DataSeeder.SeedAsync(scope.ServiceProvider);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
