@@ -6,7 +6,6 @@ namespace TaskMgmtSys.Web.Entities
     {
         public required string FirstName { get; set; }
         public string? LastName { get; set; }
-        public int MyProperty { get; set; }
         public long? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public long? UpdatedBy { get; set; }
