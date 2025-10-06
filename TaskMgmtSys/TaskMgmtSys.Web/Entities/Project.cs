@@ -7,7 +7,7 @@
         public string? Description { get; set; }
         public bool IsActive { get; set; }
 
-        //public ICollection<UserProject>? UserProjects { get; set; }
+        public ICollection<UserProject>? UserProjects { get; set; }
         //public ICollection<TaskItem>? TaskItems { get; set; }
     }
 }
