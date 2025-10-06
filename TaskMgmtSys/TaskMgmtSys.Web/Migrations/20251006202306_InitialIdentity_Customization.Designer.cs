@@ -12,7 +12,7 @@ using TaskMgmtSys.Web.Data;
 namespace TaskMgmtSys.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251006195015_InitialIdentity_Customization")]
+    [Migration("20251006202306_InitialIdentity_Customization")]
     partial class InitialIdentity_Customization
     {
         /// <inheritdoc />
@@ -37,6 +37,12 @@ namespace TaskMgmtSys.Web.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -48,6 +54,12 @@ namespace TaskMgmtSys.Web.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -137,9 +149,6 @@ namespace TaskMgmtSys.Web.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("MyProperty")
-                        .HasColumnType("int");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
