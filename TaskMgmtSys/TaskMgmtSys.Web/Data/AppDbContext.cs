@@ -14,7 +14,7 @@ namespace TaskMgmtSys.Web.Data
         }
 
         public DbSet<Project> Projects { get; set; }
-        //public DbSet<UserProject> UserProjects { get; set; }
+        public DbSet<UserProject> UserProjects { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -36,6 +36,8 @@ namespace TaskMgmtSys.Web.Data
                 entity.Property(u => u.IsDeleted).IsRequired().HasDefaultValue(false);
                 entity.HasOne(u => u.CreatedByUser).WithMany().HasForeignKey(u => u.CreatedBy).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(u => u.UpdatedByUser).WithMany().HasForeignKey(u => u.UpdatedBy).OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(p => p.UserProjects).WithOne(up => up.User).HasForeignKey(up => up.UserId).OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<AppRole>(entity =>
@@ -80,16 +82,18 @@ namespace TaskMgmtSys.Web.Data
                 entity.Property(p => p.IsActive).IsRequired().HasDefaultValue(true);
                 entity.Property(p => p.IsDeleted).IsRequired().HasDefaultValue(false);
 
-                //entity.HasMany(p => p.UserProjects).WithOne(up => up.Project).HasForeignKey(up => up.ProjectId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(p => p.UserProjects).WithOne(up => up.Project).HasForeignKey(up => up.ProjectId).OnDelete(DeleteBehavior.Cascade);
             });
 
-            //builder.Entity<UserProject>(entity =>
-            //{
-            //    entity.HasKey(up => up.UserProjectId);
+            builder.Entity<UserProject>(entity =>
+            {
+                entity.HasKey(up => up.UserProjectId);
+                entity.Property(p => p.IsActive).IsRequired().HasDefaultValue(true);
+                entity.Property(p => p.IsDeleted).IsRequired().HasDefaultValue(false);
 
-            //    entity.HasOne(up => up.User).WithMany(u => u.UserProjects).HasForeignKey(up => up.UserId).OnDelete(DeleteBehavior.Cascade);
-            //    entity.HasOne(up => up.Project).WithMany(p => p.UserProjects).HasForeignKey(up => up.ProjectId).OnDelete(DeleteBehavior.Cascade);
-            //});
+                entity.HasOne(up => up.User).WithMany(u => u.UserProjects).HasForeignKey(up => up.UserId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(up => up.Project).WithMany(p => p.UserProjects).HasForeignKey(up => up.ProjectId).OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }
