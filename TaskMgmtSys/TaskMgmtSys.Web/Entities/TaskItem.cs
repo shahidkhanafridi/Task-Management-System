@@ -25,6 +25,6 @@
         public AppUser? ActiveAssignedUser { get; set; }
         public ICollection<TaskAssignment>? TaskAssignments { get; set; }
         public ICollection<TaskAttachment>? TaskAttachments { get; set; }
-        //public ICollection<Comment>? Comments { get; set; }
+        public ICollection<Comment>? Comments { get; set; }
     }
 }

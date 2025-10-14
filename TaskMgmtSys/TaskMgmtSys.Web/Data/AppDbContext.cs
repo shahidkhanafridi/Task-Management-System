@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
+using System.Xml.Linq;
 using TaskMgmtSys.Web.Entities;
 
 namespace TaskMgmtSys.Web.Data
@@ -18,6 +19,7 @@ namespace TaskMgmtSys.Web.Data
         public DbSet<TaskItem> TaskItems { get; set; }
         public DbSet<TaskAssignment> TaskAssignments { get; set; }
         public DbSet<TaskAttachment> TaskAttachments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -44,6 +46,7 @@ namespace TaskMgmtSys.Web.Data
                 entity.HasMany(u => u.TaskItems).WithOne(t => t.ActiveAssignedUser).HasForeignKey(t => t.ActiveAssignedUserId).OnDelete(DeleteBehavior.SetNull);
                 entity.HasMany(u => u.TaskAssignments).WithOne(ta => ta.User).HasForeignKey(ta => ta.UserId).OnDelete(DeleteBehavior.Cascade);
                 entity.HasMany(u => u.TaskAttachments).WithOne(wo => wo.User).HasForeignKey(wo => wo.UserId).OnDelete(DeleteBehavior.SetNull);
+                entity.HasMany(u => u.Comments).WithOne(c => c.User).HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.SetNull);
             });
 
             builder.Entity<AppRole>(entity =>
@@ -115,6 +118,7 @@ namespace TaskMgmtSys.Web.Data
                 entity.HasOne(t => t.ActiveAssignedUser).WithMany(u => u.TaskItems).HasForeignKey(t => t.ActiveAssignedUserId).OnDelete(DeleteBehavior.SetNull);
                 entity.HasMany(t => t.TaskAssignments).WithOne(ta => ta.TaskItem).HasForeignKey(ta => ta.TaskItemId).OnDelete(DeleteBehavior.Cascade);
                 entity.HasMany(t => t.TaskAttachments).WithOne(ta => ta.TaskItem).HasForeignKey(ta => ta.TaskItemId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(t => t.Comments).WithOne(c => c.TaskItem).HasForeignKey(c => c.TaskItemId).OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<TaskAssignment>(entity =>
@@ -136,6 +140,16 @@ namespace TaskMgmtSys.Web.Data
                 entity.Property(ta => ta.IsDeleted).IsRequired().HasDefaultValue(false);
                 entity.HasOne(ta => ta.TaskItem).WithMany(t => t.TaskAttachments).HasForeignKey(ta => ta.TaskItemId).OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(ta => ta.User).WithMany(u => u.TaskAttachments).HasForeignKey(ta => ta.UserId).OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<Comment>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Content).IsRequired().HasMaxLength(10000);
+                entity.Property(c => c.IsActive).IsRequired().HasDefaultValue(true);
+                entity.Property(c => c.IsDeleted).IsRequired().HasDefaultValue(false);
+                entity.HasOne(c => c.TaskItem).WithMany(t => t.Comments).HasForeignKey(c => c.TaskItemId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(c => c.User).WithMany(u => u.Comments).HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
