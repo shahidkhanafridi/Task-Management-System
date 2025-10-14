@@ -22,6 +22,7 @@ namespace TaskMgmtSys.Web.Entities
         public virtual ICollection<AppUserToken> Tokens { get; set; } = new List<AppUserToken>();
 
         public ICollection<UserProject>? UserProjects { get; set; }
+        public ICollection<TaskItem>? TaskItems { get; set; }
         //public ICollection<TaskAssignment>? TaskAssignments { get; set; }
         //public ICollection<TaskAttachment>? TaskAttachments { get; set; }
         //public ICollection<Comment>? Comments { get; set; }

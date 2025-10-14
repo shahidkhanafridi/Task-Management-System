@@ -15,6 +15,7 @@ namespace TaskMgmtSys.Web.Data
 
         public DbSet<Project> Projects { get; set; }
         public DbSet<UserProject> UserProjects { get; set; }
+        public DbSet<TaskItem> TaskItems { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -38,6 +39,7 @@ namespace TaskMgmtSys.Web.Data
                 entity.HasOne(u => u.UpdatedByUser).WithMany().HasForeignKey(u => u.UpdatedBy).OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasMany(p => p.UserProjects).WithOne(up => up.User).HasForeignKey(up => up.UserId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(u => u.TaskItems).WithOne(t => t.ActiveAssignedUser).HasForeignKey(t => t.ActiveAssignedUserId).OnDelete(DeleteBehavior.SetNull);
             });
 
             builder.Entity<AppRole>(entity =>
@@ -83,6 +85,7 @@ namespace TaskMgmtSys.Web.Data
                 entity.Property(p => p.IsDeleted).IsRequired().HasDefaultValue(false);
 
                 entity.HasMany(p => p.UserProjects).WithOne(up => up.Project).HasForeignKey(up => up.ProjectId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(p => p.TaskItems).WithOne(t => t.Project).HasForeignKey(t => t.ProjectId).OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<UserProject>(entity =>
@@ -93,6 +96,19 @@ namespace TaskMgmtSys.Web.Data
 
                 entity.HasOne(up => up.User).WithMany(u => u.UserProjects).HasForeignKey(up => up.UserId).OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(up => up.Project).WithMany(p => p.UserProjects).HasForeignKey(up => up.ProjectId).OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<TaskItem>(entity =>
+            {
+                entity.HasKey(t => t.Id);
+                entity.Property(t => t.Title).IsRequired().HasMaxLength(300);
+                entity.Property(t => t.Description).HasMaxLength(30000);
+                entity.Property(t => t.StatusId).HasConversion<int>().IsRequired();
+                entity.Property(t => t.IsActive).IsRequired().HasDefaultValue(true);
+                entity.Property(t => t.IsDeleted).IsRequired().HasDefaultValue(false);
+
+                entity.HasOne(t => t.Project).WithMany(p => p.TaskItems).HasForeignKey(t => t.ProjectId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(t => t.ActiveAssignedUser).WithMany(u => u.TaskItems).HasForeignKey(t => t.ActiveAssignedUserId).OnDelete(DeleteBehavior.SetNull);
             });
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace TaskMgmtSys.Web.Entities
 {
-    public enum TaskItemStatus
+    public enum TaskItemStatus : int
     {
         NotStarted = 0,
         InProgress = 1,
@@ -11,18 +11,18 @@
 
     public class TaskItem : BaseEntity
     {
-        public long TaskItemId { get; set; }
+        public long Id { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public TaskItemStatus Status { get; set; } = TaskItemStatus.NotStarted;
+        public TaskItemStatus StatusId { get; set; } = TaskItemStatus.NotStarted;
         public DateTime? DueDate { get; set; }
 
-        //public long ProjectId { get; set; }
-        //public Project Project { get; set; }
+        public long ProjectId { get; set; }
+        public Project Project { get; set; }
 
-        //public long? ActiveAssignedUserId { get; set; }
-        //public AppUser? ActiveAssignedUser { get; set; }
+        public long? ActiveAssignedUserId { get; set; }
+        public AppUser? ActiveAssignedUser { get; set; }
 
         //public ICollection<TaskAssignment>? TaskAssignments { get; set; }
         //public ICollection<TaskAttachment>? TaskAttachments { get; set; }
