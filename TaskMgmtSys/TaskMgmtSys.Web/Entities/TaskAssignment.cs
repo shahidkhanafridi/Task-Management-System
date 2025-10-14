@@ -2,7 +2,7 @@
 {
     public class TaskAssignment : BaseEntity
     {
-        public long TaskAssignmentId { get; set; }
+        public long Id { get; set; }
 
         public long TaskItemId { get; set; }
         public TaskItem TaskItem { get; set; }

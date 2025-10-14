@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskMgmtSys.Web.Data;
 
@@ -11,9 +12,11 @@ using TaskMgmtSys.Web.Data;
 namespace TaskMgmtSys.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251014191206_TaskAssignments_Entity")]
+    partial class TaskAssignments_Entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -365,69 +368,6 @@ namespace TaskMgmtSys.Web.Migrations
                     b.ToTable("TaskAssignments");
                 });
 
-            modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskAttachment", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TaskItemId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskItemId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TaskAttachments");
-                });
-
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskItem", b =>
                 {
                     b.Property<long>("Id")
@@ -632,25 +572,6 @@ namespace TaskMgmtSys.Web.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskAttachment", b =>
-                {
-                    b.HasOne("TaskMgmtSys.Web.Entities.TaskItem", "TaskItem")
-                        .WithMany("TaskAttachments")
-                        .HasForeignKey("TaskItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskMgmtSys.Web.Entities.AppUser", "User")
-                        .WithMany("TaskAttachments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TaskItem");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskItem", b =>
                 {
                     b.HasOne("TaskMgmtSys.Web.Entities.AppUser", "ActiveAssignedUser")
@@ -703,8 +624,6 @@ namespace TaskMgmtSys.Web.Migrations
 
                     b.Navigation("TaskAssignments");
 
-                    b.Navigation("TaskAttachments");
-
                     b.Navigation("TaskItems");
 
                     b.Navigation("Tokens");
@@ -724,8 +643,6 @@ namespace TaskMgmtSys.Web.Migrations
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskItem", b =>
                 {
                     b.Navigation("TaskAssignments");
-
-                    b.Navigation("TaskAttachments");
                 });
 #pragma warning restore 612, 618
         }
