@@ -14,8 +14,17 @@
         public long? UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
+    public abstract class BaseEntityIsActive : AuditableEntity
+    {
+        public bool IsActive { get; set; }
+    }
+    public abstract class BaseEntityIsDeleted : AuditableEntity
+    {
+        public bool IsDeleted { get; set; }
+    }
     public abstract class BaseEntity : AuditableEntity
     {
+        public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

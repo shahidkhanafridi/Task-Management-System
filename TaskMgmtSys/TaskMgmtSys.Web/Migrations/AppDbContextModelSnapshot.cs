@@ -278,11 +278,11 @@ namespace TaskMgmtSys.Web.Migrations
 
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.Project", b =>
                 {
-                    b.Property<long>("ProjectId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ProjectId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -315,47 +315,9 @@ namespace TaskMgmtSys.Web.Migrations
                     b.Property<long?>("UpdatedBy")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ProjectId");
+                    b.HasKey("Id");
 
                     b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("TaskMgmtSys.Web.Entities.UserProject", b =>
-                {
-                    b.Property<long>("UserProjectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserProjectId"));
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("ProjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("UserProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserProjects");
                 });
 
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.AppRoleClaim", b =>
@@ -438,25 +400,6 @@ namespace TaskMgmtSys.Web.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TaskMgmtSys.Web.Entities.UserProject", b =>
-                {
-                    b.HasOne("TaskMgmtSys.Web.Entities.Project", "Project")
-                        .WithMany("UserProjects")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskMgmtSys.Web.Entities.AppUser", "User")
-                        .WithMany("UserProjects")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.AppRole", b =>
                 {
                     b.Navigation("RoleClaims");
@@ -472,14 +415,7 @@ namespace TaskMgmtSys.Web.Migrations
 
                     b.Navigation("Tokens");
 
-                    b.Navigation("UserProjects");
-
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("TaskMgmtSys.Web.Entities.Project", b =>
-                {
-                    b.Navigation("UserProjects");
                 });
 #pragma warning restore 612, 618
         }
