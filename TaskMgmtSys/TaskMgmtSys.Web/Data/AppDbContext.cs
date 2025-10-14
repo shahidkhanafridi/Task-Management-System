@@ -16,6 +16,7 @@ namespace TaskMgmtSys.Web.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<UserProject> UserProjects { get; set; }
         public DbSet<TaskItem> TaskItems { get; set; }
+        public DbSet<TaskAssignment> TaskAssignments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -40,6 +41,7 @@ namespace TaskMgmtSys.Web.Data
 
                 entity.HasMany(p => p.UserProjects).WithOne(up => up.User).HasForeignKey(up => up.UserId).OnDelete(DeleteBehavior.Cascade);
                 entity.HasMany(u => u.TaskItems).WithOne(t => t.ActiveAssignedUser).HasForeignKey(t => t.ActiveAssignedUserId).OnDelete(DeleteBehavior.SetNull);
+                entity.HasMany(u => u.TaskAssignments).WithOne(ta => ta.User).HasForeignKey(ta => ta.UserId).OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<AppRole>(entity =>
@@ -109,6 +111,16 @@ namespace TaskMgmtSys.Web.Data
 
                 entity.HasOne(t => t.Project).WithMany(p => p.TaskItems).HasForeignKey(t => t.ProjectId).OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(t => t.ActiveAssignedUser).WithMany(u => u.TaskItems).HasForeignKey(t => t.ActiveAssignedUserId).OnDelete(DeleteBehavior.SetNull);
+                entity.HasMany(t => t.TaskAssignments).WithOne(ta => ta.TaskItem).HasForeignKey(ta => ta.TaskItemId).OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<TaskAssignment>(entity =>
+            {
+                entity.HasKey(ta => ta.TaskAssignmentId);
+                entity.Property(ta => ta.IsActive).IsRequired().HasDefaultValue(true);
+                entity.Property(ta => ta.IsDeleted).IsRequired().HasDefaultValue(false);
+                entity.HasOne(ta => ta.TaskItem).WithMany(t => t.TaskAssignments).HasForeignKey(ta => ta.TaskItemId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(ta => ta.User).WithMany(u => u.TaskAssignments).HasForeignKey(ta => ta.UserId).OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
