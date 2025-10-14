@@ -20,6 +20,7 @@ namespace TaskMgmtSys.Web.Data
         public DbSet<TaskAssignment> TaskAssignments { get; set; }
         public DbSet<TaskAttachment> TaskAttachments { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<CommentAttachment> CommentAttachments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -150,6 +151,19 @@ namespace TaskMgmtSys.Web.Data
                 entity.Property(c => c.IsDeleted).IsRequired().HasDefaultValue(false);
                 entity.HasOne(c => c.TaskItem).WithMany(t => t.Comments).HasForeignKey(c => c.TaskItemId).OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(c => c.User).WithMany(u => u.Comments).HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(c => c.CommentAttachments).WithOne(ca => ca.Comment).HasForeignKey(ca => ca.CommentId).OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<CommentAttachment>(entity =>
+            {
+                entity.HasKey(ca => ca.Id);
+                entity.Property(ca => ca.FilePath).IsRequired().HasMaxLength(2000);
+                entity.Property(ca => ca.FileName).IsRequired().HasMaxLength(500);
+                entity.Property(ca => ca.ContentType).HasMaxLength(100);
+                entity.Property(ca => ca.IsActive).IsRequired().HasDefaultValue(true);
+                entity.Property(ca => ca.IsDeleted).IsRequired().HasDefaultValue(false);
+                entity.HasOne(ca => ca.Comment).WithMany(c => c.CommentAttachments).HasForeignKey(ca => ca.CommentId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(ca => ca.User).WithMany(u => u.CommentAttachments).HasForeignKey(ca => ca.UserId).OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

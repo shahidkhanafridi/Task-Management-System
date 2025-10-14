@@ -11,7 +11,6 @@
         public long UserId { get; set; }
         public AppUser User { get; set; }
 
-        // Navigation
-        //public ICollection<CommentAttachment>? CommentAttachments { get; set; }
+        public ICollection<CommentAttachment>? CommentAttachments { get; set; }
     }
 }
