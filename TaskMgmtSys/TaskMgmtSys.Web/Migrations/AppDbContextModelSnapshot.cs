@@ -317,52 +317,7 @@ namespace TaskMgmtSys.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskAssignment", b =>
-                {
-                    b.Property<long>("TaskAssignmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TaskAssignmentId"));
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<long>("TaskItemId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("TaskAssignmentId");
-
-                    b.HasIndex("TaskItemId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TaskAssignments");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskItem", b =>
@@ -422,7 +377,7 @@ namespace TaskMgmtSys.Web.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("TaskItems");
+                    b.ToTable("TaskItems", (string)null);
                 });
 
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.UserProject", b =>
@@ -467,7 +422,7 @@ namespace TaskMgmtSys.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserProjects");
+                    b.ToTable("UserProjects", (string)null);
                 });
 
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.AppRoleClaim", b =>
@@ -550,25 +505,6 @@ namespace TaskMgmtSys.Web.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskAssignment", b =>
-                {
-                    b.HasOne("TaskMgmtSys.Web.Entities.TaskItem", "TaskItem")
-                        .WithMany("TaskAssignments")
-                        .HasForeignKey("TaskItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskMgmtSys.Web.Entities.AppUser", "User")
-                        .WithMany("TaskAssignments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TaskItem");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskItem", b =>
                 {
                     b.HasOne("TaskMgmtSys.Web.Entities.AppUser", "ActiveAssignedUser")
@@ -619,8 +555,6 @@ namespace TaskMgmtSys.Web.Migrations
 
                     b.Navigation("Logins");
 
-                    b.Navigation("TaskAssignments");
-
                     b.Navigation("TaskItems");
 
                     b.Navigation("Tokens");
@@ -635,11 +569,6 @@ namespace TaskMgmtSys.Web.Migrations
                     b.Navigation("TaskItems");
 
                     b.Navigation("UserProjects");
-                });
-
-            modelBuilder.Entity("TaskMgmtSys.Web.Entities.TaskItem", b =>
-                {
-                    b.Navigation("TaskAssignments");
                 });
 #pragma warning restore 612, 618
         }
