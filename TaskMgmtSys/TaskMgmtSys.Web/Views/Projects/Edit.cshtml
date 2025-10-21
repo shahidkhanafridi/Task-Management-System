@@ -1,0 +1,33 @@
+﻿@model TaskMgmtSys.Web.Models.Project
+@{
+    ViewData["Title"] = "Edit Project";
+}
+
+<div ng-controller="projectFormController" ng-init="loadProject(@Model.Id)" class="mt-4">
+    <h2 class="text-center mb-4">Edit Project</h2>
+
+    <form name="projectForm" ng-submit="saveProject()" novalidate>
+        <input type="hidden" ng-model="project.Id" />
+
+        <div class="form-group mb-3">
+            <label>Project Name</label>
+            <input type="text" class="form-control"
+                   ng-model="project.ProjectName" required />
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Description</label>
+            <textarea class="form-control" ng-model="project.Description"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="/Projects" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+
+    <div class="alert alert-success mt-3" ng-if="successMessage">{{ successMessage }}</div>
+    <div class="alert alert-danger mt-3" ng-if="errorMessage">{{ errorMessage }}</div>
+</div>
+
+@section Scripts {
+    <script src="~/js/controllers/projectFormController.js"></script>
+}

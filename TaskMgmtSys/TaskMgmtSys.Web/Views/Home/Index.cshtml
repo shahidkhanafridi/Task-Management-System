@@ -1,8 +1,78 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mb-4" ng-controller="homeController">
+    <h1 class="display-5 fw-bold mb-3">Welcome, {{ userName || 'User' }}!</h1>
+    <p class="lead">Today is <strong>{{ currentDate | date:'fullDate' }}</strong>.</p>
 </div>
+
+<hr />
+
+<div class="row g-4 mt-4" ng-controller="homeController">
+    <!-- Projects -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 hover-card" ng-click="navigate('/Projects')">
+            <div class="card-body text-center">
+                <h5 class="card-title fw-semibold">Projects</h5>
+                <p class="card-text text-muted">Manage your projects, teams, and progress.</p>
+            </div>
+            <div class="card-footer bg-light text-center">
+                <a asp-controller="Projects" asp-action="Index" class="btn btn-sm btn-primary">Go to Projects</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 hover-card" ng-click="navigate('/Users')">
+            <div class="card-body text-center">
+                <h5 class="card-title fw-semibold">Users</h5>
+                <p class="card-text text-muted">Manage application users, roles, and access levels.</p>
+            </div>
+            <div class="card-footer bg-light text-center">
+                <a asp-controller="Users" asp-action="Index" class="btn btn-sm btn-success">Go to Users</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tasks -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 hover-card" ng-click="navigate('/TaskItems')">
+            <div class="card-body text-center">
+                <h5 class="card-title fw-semibold">Tasks</h5>
+                <p class="card-text text-muted">View, assign, and track project tasks and comments.</p>
+            </div>
+            <div class="card-footer bg-light text-center">
+                <a asp-controller="TaskItems" asp-action="Index" class="btn btn-sm btn-warning text-white">Go to Tasks</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .hover-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+            .hover-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        app.controller("homeController", function ($scope, $window) {
+            $scope.userName = "System Admin";
+            $scope.currentDate = new Date();
+
+            $scope.navigate = function (path) {
+                $window.location.href = path;
+            };
+        });
+    </script>
+}
